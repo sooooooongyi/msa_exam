@@ -1,0 +1,22 @@
+services:
+  eureka-server:
+    build: ./server
+    image: eureka-server:latest
+    ports:
+      - "19090:19090"
+    networks:
+      - app-network
+
+  gateway:
+    build: ./gateway
+    image: gateway:latest
+    ports:
+      - "19091:19091"
+    depends_on:
+      - eureka-server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
