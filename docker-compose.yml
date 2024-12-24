@@ -17,6 +17,29 @@ services:
     networks:
       - app-network
 
+  auth-service:
+    build: ./auth
+    image: auth-service:latest
+    ports:
+      - "19095:19095"
+    networks:
+      - app-network
+    depends_on:
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/authdb
+
+  auth-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: systempass
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
